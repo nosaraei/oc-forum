@@ -40,6 +40,8 @@ class Topics extends ComponentBase
      * @var int Number of topics to display per page.
      */
     public $topicsPerPage;
+    
+    public $pagination;
 
     public function componentDetails()
     {
@@ -102,6 +104,7 @@ class Topics extends ComponentBase
         $this->topicPage = $this->page['topicPage'] = $this->property('topicPage');
         $this->memberPage = $this->page['memberPage'] = $this->property('memberPage');
         $this->topicsPerPage = $this->page['topicsPerPage'] = $this->property('topicsPerPage');
+        $this->pagination = $this->property('pagination', true);
     }
 
     protected function prepareTopicList()
@@ -133,7 +136,7 @@ class Topics extends ComponentBase
         /*
          * Signed in member
          */
-        $this->page['member'] = $this->member = MemberModel::getFromUser();
+        //$this->page['member'] = $this->member = MemberModel::getFromUser();
 
         if ($this->member) {
             $this->member->setUrl($this->memberPage, $this->controller);

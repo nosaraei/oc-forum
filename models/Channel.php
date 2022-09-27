@@ -151,4 +151,20 @@ class Channel extends Model
 
         return $this->url = $controller->pageUrl($pageName, $params);
     }
+    
+    public function getSumTopicCountAttribute(){
+        
+        return $this
+            ->newQuery()
+            ->allChildren(true)
+            ->sum("count_topics");
+    }
+    
+    public function getSumPostCountAttribute(){
+        
+        return $this
+            ->newQuery()
+            ->allChildren(true)
+            ->sum("count_posts");
+    }
 }

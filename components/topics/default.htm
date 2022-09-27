@@ -3,7 +3,7 @@
 
     {% partial __SELF__ ~ "::topics" %}
 
-    {% if topics %}
+    {% if topics and __SELF__.pagination %}
         {% partial __SELF__ ~ "::pagination" %}
     {% endif %}
 </div>

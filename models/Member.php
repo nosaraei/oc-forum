@@ -49,7 +49,7 @@ class Member extends Model
      * @var array Relations
      */
     public $belongsTo = [
-        'user' => ['RainLab\User\Models\User']
+        'user' => ['Nosaraei\User\Models\User']
     ];
 
     public $hasMany = [
@@ -58,13 +58,13 @@ class Member extends Model
 
     /**
      * Automatically creates a forum member for a user if not one already.
-     * @param  RainLab\User\Models\User $user
+     * @param  Nosaraei\User\Models\User $user
      * @return RainLab\Forum\Models\Member
      */
     public static function getFromUser($user = null)
     {
         if ($user === null) {
-            $user = Auth::getUser();
+            $user = $GLOBALS["me"];
         }
 
         if (!$user) {

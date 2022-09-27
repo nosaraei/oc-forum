@@ -2,17 +2,17 @@
 
 use Event;
 use Backend;
-use RainLab\User\Models\User;
+use Nosaraei\User\Models\User;
 use RainLab\Forum\Models\Member;
 use System\Classes\PluginBase;
-use RainLab\User\Controllers\Users as UsersController;
+use Nosaraei\User\Controllers\Users as UsersController;
 
 /**
  * Forum Plugin Information File
  */
 class Plugin extends PluginBase
 {
-    public $require = ['RainLab.User'];
+    public $require = ['Nosaraei.User'];
 
     /**
      * Returns information about this plugin.
@@ -42,7 +42,7 @@ class Plugin extends PluginBase
 
         UsersController::extendFormFields(function($widget, $model, $context) {
             // Prevent extending of related form instead of the intended User form
-            if (!$widget->model instanceof \RainLab\User\Models\User) {
+            if (!$widget->model instanceof \Nosaraei\User\Models\User) {
                 return;
             }
             if ($context != 'update') {
@@ -76,7 +76,7 @@ class Plugin extends PluginBase
         });
 
         UsersController::extendListColumns(function($widget, $model) {
-            if (!$model instanceof \RainLab\User\Models\User) {
+            if (!$model instanceof \Nosaraei\User\Models\User) {
                 return;
             }
 
@@ -116,20 +116,31 @@ class Plugin extends PluginBase
             ]
         ];
     }
-
-    public function registerSettings()
+    
+    public function registerNavigation()
     {
         return [
-            'settings' => [
-                'label'       => 'rainlab.forum::lang.settings.channels',
-                'description' => 'rainlab.forum::lang.settings.channels_desc',
-                'icon'        => 'icon-comments',
-                'url'         => Backend::url('rainlab/forum/channels'),
-                'category'    => 'rainlab.forum::lang.plugin.name',
-                'order'       => 500,
-                'permissions' => ['rainlab.forum.manage_channels'],
+            'forum' => [
+                'label' => 'rainlab.forum::lang.plugin.name',
+                'url' => Backend::url('rainlab/forum/channels'),
+                'icon' => 'icon-th',
+                'permissions' => ['rainlab.forum.*'],
+                'order' => 500,
+                'sideMenu' => [
+                    'channels' => [
+                        'label' => 'rainlab.forum::lang.settings.channels',
+                        'icon' => 'icon-th',
+                        'url' => Backend::url('rainlab/forum/channels'),
+                        'permissions' => ['rainlab.forum.manage_channels']
+                    ]
+                ]
             ]
         ];
+    }
+    
+    public function registerSettings()
+    {
+        return [];
     }
 
     public function registerMailTemplates()

@@ -3,55 +3,58 @@
     {% flash %}
         <div class="alert alert-{{ type == 'error' ? 'danger' : type }}">
             {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <button type="button" class="close" style="float: left" data-dismiss="alert" aria-hidden="true">&times;</button>
         </div>
     {% endflash %}
 
-    {% if returnUrl %}
-        <p>&larr; <a href="{{ returnUrl }}">Back to {{ channel.title }}</a></p>
-    {% endif %}
-
     {% if topic %}
 
-        <h4>{{ topic.subject }}</h4>
+        <h5 class="mt-2 mb-3">{{ topic.subject }}</h5>
 
+        <div>
+            {% partial "@posts" %}
+    
+            {% partial "@pagination" %}
+        </div>
+    
         <div class="row">
-            <div class="col-md-3 col-md-push-9">
+            <div class="col-md-9">
+        
+                <div class="mb-3">ارسال پست برای این تاپیک</div>
+                {% if not topic.canPost %}
+                <p>
+                    You cannot edit posts or make replies:
+                    {% if not member %}You should be logged in before you can post.{% endif %}
+                    {% if member.is_banned %}Your account is banned.{% endif %}
+                    {% if topic.is_locked %}This topic is locked.{% endif %}
+                </p>
+                {% else %}
+                {% partial "@postform" %}
+                {% endif %}
+    
+            </div>
+            <div class="col-md-3">
 
                 <div id="topicControlPanel">
                     {% partial "@controlpanel" %}
                 </div>
 
             </div>
-            <div class="col-md-9 col-md-pull-3">
-
-                {% partial "@posts" %}
-
-                {% partial "@pagination" %}
-
-                <h4>Reply to this discussion</h4>
-                {% if not topic.canPost %}
-                    <p>
-                        You cannot edit posts or make replies:
-                        {% if not member %}You should be logged in before you can post.{% endif %}
-                        {% if member.is_banned %}Your account is banned.{% endif %}
-                        {% if topic.is_locked %}This topic is locked.{% endif %}
-                    </p>
-                {% else %}
-                    {% partial "@postform" %}
-                {% endif %}
-
-            </div>
+            
         </div>
 
     {% elseif channel %}
 
-        <h4>Create a new discussion topic</h4>
+        <h5>ایجاد تاپیک جدید</h5>
         {% partial "@createform" %}
 
     {% else %}
 
-        <p>Topic not found</p>
+        <p>تاپیک مورد نظر پیدا نشد</p>
 
+    {% endif %}
+    
+    {% if returnUrl %}
+    <p class="hide">&larr; <a href="{{ returnUrl }}">بازگشت به {{ channel.title }}</a></p>
     {% endif %}
 </div>

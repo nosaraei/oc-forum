@@ -1,14 +1,17 @@
-<a href="{{ post.member.url }}" class="avatar">
+<a href="{{ post.member.url }}" class="avatar hide">
     <img src="{{ post.member.user.avatarThumb(50) }}" alt="{{ post.member.username }}" />
 </a>
+
+<div class="post-bar">
+    <span class="username">{{ post.member.username }}</span>
+    <a class="datetime" href="#post-{{ post.id }}">
+        {% partial __SELF__ ~ "::timestamp" date=post.created_at %}
+    </a>
+</div>
+
 <div class="content">
-    <a href="{{ post.member.url }}" class="author">{{ post.member.username }}</a>
+    
     <div class="metadata">
-        <div class="date">
-            <a href="#post-{{ post.id }}">
-                {% partial __SELF__ ~ "::timestamp" date=post.created_at %}
-            </a>
-        </div>
         {% if post.member.is_banned %}
             <div class="status text-danger">
                 <i class="icon-exclamation"></i> Banned
@@ -49,7 +52,7 @@
                     data-request-data="post: {{ post.id }}"
                     data-request-update="'{{ __SELF__ }}::post': '#post-{{ post.id }}'"
                     class="save">
-                    Save
+                    ذخیره
                 </a>
 
                 <a
@@ -57,9 +60,9 @@
                     data-request="{{ __SELF__ }}::onUpdate"
                     data-request-data="post: {{ post.id }}, mode: 'delete'"
                     data-request-update="'{{ __SELF__ }}::post': '#post-{{ post.id }}'"
-                    data-request-confirm="Are you sure?"
+                    data-request-confirm="آیا مطمئن هستید؟"
                     class="delete">
-                    Delete
+                    حذف
                 </a>
 
                 <a href="javascript:;"
@@ -67,7 +70,7 @@
                     data-request-data="post: {{ post.id }}, mode: 'view'"
                     data-request-update="'{{ __SELF__ }}::post': '#post-{{ post.id }}'"
                     class="cancel">
-                    Cancel
+                    انصراف
                 </a>
             </div>
         {{ form_close() }}
@@ -79,20 +82,17 @@
     {% else %}
         <div class="text">
             {{ post.content_html|raw }}
-
-            {% if post.created_at != post.updated_at %}
-                <p><small class="text text-muted">
-                    Last updated {% partial __SELF__ ~ "::timestamp" date=post.updated_at %}
-                </small></p>
-            {% endif %}
         </div>
+        {% if post.created_at != post.updated_at %}
+        <div class="last-update">آخرین ویرایش {% partial __SELF__ ~ "::timestamp" date=post.updated_at %}</div>
+        {% endif %}
         <div class="actions">
             {% if topic.canPost %}
                 <a href="javascript:;"
-                    class="quote"
+                    class="quote hide"
                     data-request-data="post: {{ post.id }}"
                     data-quote-button>
-                    Quote
+                    نقل قول
                 </a>
             {% endif %}
             {% if topic.canPost and post.canEdit and mode != 'edit' and mode != 'delete' %}
@@ -101,9 +101,17 @@
                     data-request="onUpdate"
                     data-request-data="post: {{ post.id }}"
                     data-request-update="'{{ __SELF__ ~ '::post' }}': '#post-{{ post.id }}'">
-                    Edit
+                    ویرایش
                 </a>
             {% endif %}
+            <a href="javascript:;"
+               class="require-login"
+               data-request="onLike"
+               data-request-data="post: {{ post.id }}"
+               data-request-update="'{{ __SELF__ ~ '::post' }}': '#post-{{ post.id }}'">
+                لایک
+            </a>
+            <span class="likes">5 لایک</span>
         </div>
     {% endif %}
 

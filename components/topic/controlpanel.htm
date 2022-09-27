@@ -10,7 +10,7 @@
                             <option value="{{ id }}">{{ title|raw }}</option>
                         {% endfor %}
                     </select>
-                    <button type="submit" class="btn btn-block btn-primary btn-sm">Move</button>
+                    <button type="submit" class="btn btn-block btn-primary btn-sm">انتقال تاپیک</button>
                 {{ form_close() }}
             </div>
 
@@ -19,9 +19,9 @@
                 data-request="onLock"
                 data-request-update="'@controlpanel': '#topicControlPanel'">
                 {% if topic.is_locked %}
-                    Unlock topic
+                    باز کردن قفل تاپیک
                 {% else %}
-                    Lock topic
+                    قفل کردن تاپیک
                 {% endif %}
             </a>
 
@@ -43,25 +43,21 @@
                 data-request="onFollow"
                 data-request-update="'@controlpanel': '#topicControlPanel'">
                 {% if member.isFollowing(topic) %}
-                    Unfollow this topic
+                    عدم دنبال تاپیک
                 {% else %}
-                    Follow this topic
+                    دنبال کردن تاپیک
                 {% endif %}
             </a>
         {% endif %}
 
         {% if topic.is_locked %}
             <div class="list-group-item">
-                <span class="text text-danger"><i class="icon icon-lock"></i> This topic is locked</span>
+                <span class="text text-danger"><i class="icon icon-lock"></i> این تاپیک قفل است</span>
             </div>
-        {% else %}
-            <a href="#postForm" class="list-group-item">
-                Post a reply
-            </a>
         {% endif %}
 
         <div class="list-group-item">
-            <i class="fa fa-eye icon-eye-open"></i> {{ topic.count_views }} views
+            <i class="fa fa-eye icon-eye-open"></i> {{ topic.count_views }} بازدید
         </div>
 
     </div>

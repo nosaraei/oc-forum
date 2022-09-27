@@ -310,7 +310,7 @@ class Topic extends ComponentBase
     public function onCreate()
     {
         try {
-            if (!$user = Auth::getUser()) {
+            if (!$user = $GLOBALS["me"]) {
                 throw new ApplicationException('You should be logged in.');
             }
 
@@ -332,7 +332,7 @@ class Topic extends ComponentBase
             $topic = TopicModel::createInChannel($channel, $member, post());
             $topicUrl = $this->currentPageUrl([$this->paramName('slug') => $topic->slug]);
 
-            Flash::success(post('flash', 'Topic created successfully!'));
+            Flash::success(post('flash', 'تاپیک با موفقیت ایجاد شد!'));
 
             /*
              * Extensbility
@@ -355,7 +355,7 @@ class Topic extends ComponentBase
     public function onPost()
     {
         try {
-            if (!$user = Auth::getUser()) {
+            if (!$user = $GLOBALS["me"]) {
                 throw new ApplicationException('You should be logged in.');
             }
 
@@ -370,7 +370,7 @@ class Topic extends ComponentBase
             $postUrl = $this->currentPageUrl([$this->paramName('slug') => $topic->slug]);
 
             TopicFollow::sendNotifications($topic, $post, $postUrl);
-            Flash::success(post('flash', 'Response added successfully!'));
+            Flash::success(post('flash', 'پست با موفقیت ایجاد گردید!'));
 
             /*
              * Extensbility
@@ -430,7 +430,7 @@ class Topic extends ComponentBase
 
     public function onQuote()
     {
-        if (!$user = Auth::getUser()) {
+        if (!$user = $GLOBALS["me"]) {
             throw new ApplicationException('You should be logged in.');
         }
 
@@ -466,7 +466,7 @@ class Topic extends ComponentBase
     public function onFollow()
     {
         try {
-            if (!$user = Auth::getUser()) {
+            if (!$user = $GLOBALS["me"]) {
                 throw new ApplicationException('You should be logged in.');
             }
 

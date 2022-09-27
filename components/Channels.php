@@ -98,9 +98,24 @@ class Channels extends ComponentBase
         if ($this->channels !== null) {
             return $this->channels;
         }
-
-        $channels = Channel::with('first_topic')->isVisible()->get();
-
+    
+        $channels = Channel::with('first_topic')->isVisible();
+        
+        if(!empty($this->page["channel"])){
+            
+            $query = $this->page["channel"]
+                ->newQuery()
+                ->allChildren(false)
+                ->where("nest_depth", "<=", $this->page["channel"]->nest_depth + 3);
+    
+            $channels = $query
+                ->get();
+            
+        }
+        else{
+            $channels = $channels->get();
+        }
+        
         /*
          * Add a "url" helper attribute for linking to each channel
          */
@@ -112,14 +127,15 @@ class Channels extends ComponentBase
             }
         });
 
-        $this->page['member'] = $this->member = MemberModel::getFromUser();
+       // $this->page['member'] = $this->member = MemberModel::getFromUser();
 
         if ($this->member) {
             $channels = TopicTracker::instance()->setFlagsOnChannels($channels, $this->member);
         }
-
-        $channels = $channels->toNested();
-
+    
+        $channels = $channels->toNested(false)->values();
+        
+        //dd($channels);
         return $this->channels = $channels;
     }
 }
