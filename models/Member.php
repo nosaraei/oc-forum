@@ -75,13 +75,13 @@ class Member extends Model
             $member->setRelation('user', $user);
         }
         else {
-            $generatedUsername = explode('@', $user->email);
-            $generatedUsername = array_shift($generatedUsername);
-            $generatedUsername = Str::limit($generatedUsername, 24, '') . $user->id;
+//            $generatedUsername = explode('@', $user->email);
+//            $generatedUsername = array_shift($generatedUsername);
+//            $generatedUsername = Str::limit($generatedUsername, 24, '') . $user->id;
 
             $member = new static;
             $member->user = $user;
-            $member->username = $generatedUsername;
+            //$member->username = $generatedUsername;
             $member->save();
 
             $user->forum_member = $member;
@@ -90,6 +90,16 @@ class Member extends Model
         return $member;
     }
 
+    public function getUsernameAttribute(){
+        
+        return $this->user->username;
+    }
+    
+    public function getIsModeratorAttribute(){
+        
+        return $this->user->usergroups()->where("code", "forum-moderator")->count() ? 1 : 0;
+    }
+    
     /**
      * Can the specified member edit this member
      * @param  self $member

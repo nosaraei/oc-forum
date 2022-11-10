@@ -17,6 +17,7 @@ use RainLab\Forum\Models\Post as PostModel;
 use RainLab\Forum\Models\TopicFollow;
 use RainLab\Forum\Classes\TopicTracker;
 use Exception;
+use DB;
 
 class Topic extends ComponentBase
 {
@@ -200,7 +201,7 @@ class Topic extends ComponentBase
         if ($topic = $this->getTopic()) {
             $currentPage = input('page');
             $searchString = trim(input('search'));
-            $posts = PostModel::with('member.user.avatar')->listFrontEnd([
+            $posts = PostModel::with('member.user.avatar')->withCount("likes")->listFrontEnd([
                 'page'    => $currentPage,
                 'perPage' => $this->property('postsPerPage'),
                 'sort'    => 'created_at',
@@ -212,6 +213,12 @@ class Topic extends ComponentBase
              * Add a "url" helper attribute for linking to each member
              */
             $posts->each(function($post){
+                $post->is_liked = $this->getMember() ? (DB
+                    ::table('rainlab_forum_post_likes')
+                    ->where('post_id', $post->id)
+                    ->where('member_id', $this->getMember()->id)
+                    ->first() ? 1 : 0) : 0;
+                ;
                 if ($post->member)
                     $post->member->setUrl($this->memberPage, $this->controller);
             });
@@ -318,7 +325,7 @@ class Topic extends ComponentBase
             $channel = $this->getChannel();
 
             if ($channel->is_moderated && !$member->is_moderator) {
-                throw new ApplicationException('You cannot create a topic in this channel.');
+                throw new ApplicationException('شما نمی توانید در این دسته بندی تاپیک ایجاد کنید.');
             }
 
             if (TopicModel::checkThrottle($member)) {
@@ -426,6 +433,37 @@ class Topic extends ComponentBase
         $this->page['mode'] = $mode;
         $this->page['post'] = $post;
         $this->page['topic'] = $topic;
+    }
+    
+    public function onLike(){
+    
+        $member = $this->getMember();
+    
+        $post = PostModel::find(post('post'));
+    
+        $check = $post
+            ->likes()
+            ->where('member_id', $member->id)
+            ->first();
+    
+        if($check){
+    
+            $post->likes()->detach($member->id);
+    
+            $post->is_liked = 0;
+        
+        }
+        else{
+    
+            $post->likes()->save($member);
+    
+            $post->is_liked = 1;
+        
+        }
+    
+        $post->likes_count = $post->likes()->count();
+        $this->page['post'] = $post;
+        $this->page['topic'] = $this->getTopic();
     }
 
     public function onQuote()

@@ -48,7 +48,16 @@ class Post extends Model
         'topic'  => ['RainLab\Forum\Models\Topic'],
         'member' => ['RainLab\Forum\Models\Member'],
     ];
-
+    
+    public $belongsToMany = [
+        'likes' => [
+            Member::class,
+            'key' => 'post_id',
+            'otherKey' => 'member_id',
+            'table' => 'rainlab_forum_post_likes',
+        ]
+    ];
+    
     /**
      * Creates a postinside a topic
      * @param  Topic $topic
@@ -65,7 +74,7 @@ class Post extends Model
         $post->content = array_get($data, 'content');
         $post->save();
 
-        TopicFollow::follow($topic, $member);
+        //TopicFollow::follow($topic, $member);
         $member->touchActivity();
 
         return $post;

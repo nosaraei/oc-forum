@@ -1,31 +1,33 @@
-<a href="{{ post.member.url }}" class="avatar hide">
-    <img src="{{ post.member.user.avatarThumb(50) }}" alt="{{ post.member.username }}" />
-</a>
-
 <div class="post-bar">
+    <span class="avatar">
+        {% if(post.member.user.avatar and post.member.user.is_verified_avatar) %}
+        <img src="{{ post.member.user.avatar.path }}" alt="{{ user.username }}" />
+        {% else %}
+        <img src="{{ 'assets/src/img/placeholder/avatar.jpg'|theme }}" alt="کاربر" />
+        {% endif %}
+    </span>
     <span class="username">{{ post.member.username }}</span>
+    <div class="metadata">
+        {% if post.member.is_banned %}
+        <div class="status text-danger">
+            <i class="icon-exclamation"></i> - اخراج شده
+        </div>
+        {% elseif topic.channel.is_guarded and not post.member.is_approved %}
+        <div class="status text-warning">
+            <i class="icon-lock"></i> - تایید نشده
+        </div>
+        {% elseif post.member.is_moderator %}
+        <div class="status">
+            <i class="icon-star"></i> - مدیر
+        </div>
+        {% endif %}
+    </div>
     <a class="datetime" href="#post-{{ post.id }}">
         {% partial __SELF__ ~ "::timestamp" date=post.created_at %}
     </a>
 </div>
 
 <div class="content">
-    
-    <div class="metadata">
-        {% if post.member.is_banned %}
-            <div class="status text-danger">
-                <i class="icon-exclamation"></i> Banned
-            </div>
-        {% elseif topic.channel.is_guarded and not post.member.is_approved %}
-            <div class="status text-warning">
-                <i class="icon-lock"></i> Unapproved
-            </div>
-        {% elseif post.member.is_moderator %}
-            <div class="status">
-                <i class="icon-star"></i> Moderator
-            </div>
-        {% endif %}
-    </div>
 
     {% if mode == 'edit' %}
 
@@ -109,9 +111,9 @@
                data-request="onLike"
                data-request-data="post: {{ post.id }}"
                data-request-update="'{{ __SELF__ ~ '::post' }}': '#post-{{ post.id }}'">
-                لایک
+                {{ post.is_liked ? 'برداشتن لایک' : 'لایک' }}
             </a>
-            <span class="likes">5 لایک</span>
+            <span class="likes">{{ post.likes_count }} لایک</span>
         </div>
     {% endif %}
 

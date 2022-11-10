@@ -19,16 +19,16 @@
     
         <div class="row">
             <div class="col-md-9">
-        
-                <div class="mb-3">ارسال پست برای این تاپیک</div>
+                
                 {% if not topic.canPost %}
-                <p>
-                    You cannot edit posts or make replies:
-                    {% if not member %}You should be logged in before you can post.{% endif %}
-                    {% if member.is_banned %}Your account is banned.{% endif %}
-                    {% if topic.is_locked %}This topic is locked.{% endif %}
-                </p>
+                <div class="mb-3">
+                    شما نمی توانید در این تاپیک پست ارسال کنید،
+                    {% if not member %}شما لاگین نیستید{% endif %}
+                    {% if member.is_banned %}شما از سایت اخراج شده اید{% endif %}
+                    {% if topic.is_locked %}این تاپیک قفل است{% endif %}
+                </div>
                 {% else %}
+                <div class="mb-3">ارسال پست برای این تاپیک</div>
                 {% partial "@postform" %}
                 {% endif %}
     

@@ -4,9 +4,9 @@
 
     <table class="forum-table">
         <tr class="root-channel">
-            <th colspan="2">دسته بندی</th>
-            <th class="counter-column">تاپیک ها</th>
-            <th class="counter-column">پست ها</th>
+            <th colspan="2">دسته‌بندی</th>
+            <th class="counter-column">تاپیک‌ها</th>
+            <th class="counter-column">پست‌ها</th>
         </tr>
 
 
@@ -29,7 +29,7 @@
                     {% if channel.children|length %}
                         <div class="forum-subchannel">
                             <ul>
-                                <li><span>زیر دسته ها:</span></li>
+                                <li><span>زیر‌دسته‌ها:</span></li>
                                 {% for channel in channel.children %}
                                     <li>
                                         <a href="{{ channel.url }}" title="{{ channel.description }}">

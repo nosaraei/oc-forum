@@ -139,7 +139,7 @@ class Channel extends ComponentBase
             $searchString = trim(input('search'));
             $topics = TopicModel::with('last_post_member')->listFrontEnd([
                 'page'     => $currentPage,
-                'perPage'     => 15,
+                'perPage'  => 15,
                 'sort'     => 'updated_at',
                 'channels' => $channel->id,
                 'search'   => $searchString,
@@ -196,6 +196,6 @@ class Channel extends ComponentBase
             }
         }
 
-        $this->page['isGuest'] = !$GLOBALS["me"];
+        $this->page['isGuest'] = false;
     }
 }

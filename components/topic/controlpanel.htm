@@ -3,13 +3,14 @@
 
         {% if member.is_moderator %}
             <div class="list-group-item">
-                {{ form_open({ request: 'onMove', 'data-request-confirm': "Are you sure?" }) }}
-                    <label>Move to:</label>
+                {{ form_open({ request: 'onMove', 'data-request-confirm': "آیا از انتقال تاپیک مطمئن هستید؟" }) }}
+                    <label>انتقال به:</label>
                     <select name="channel" class="form-control input-sm">
                         {% for id, title in __SELF__.channelList %}
                             <option value="{{ id }}">{{ title|raw }}</option>
                         {% endfor %}
                     </select>
+                    <br />
                     <button type="submit" class="btn btn-block btn-primary btn-sm">انتقال تاپیک</button>
                 {{ form_close() }}
             </div>
@@ -30,14 +31,14 @@
                 data-request="onSticky"
                 data-request-update="'@controlpanel': '#topicControlPanel'">
                 {% if topic.is_sticky %}
-                    Unsticky topic
+                    باز کردن سنجاق تاپیک
                 {% else %}
-                    Sticky topic
+                    سنجاق کردن تاپیک
                 {% endif %}
             </a>
         {% endif %}
 
-        {% if member %}
+        {% if false %}
             <a href="javascript:;"
                 class="list-group-item"
                 data-request="onFollow"

@@ -52,44 +52,44 @@ class Plugin extends PluginBase
                 return;
             }
 
-            $widget->addFields([
-                'forum_member[username]' => [
-                    'label'   => 'rainlab.forum::lang.settings.username',
-                    'tab'     => 'Forum',
-                    'comment' => 'rainlab.forum::lang.settings.username_comment'
-                ],
-                'forum_member[is_moderator]' => [
-                    'label'   => 'rainlab.forum::lang.settings.moderator',
-                    'type'    => 'checkbox',
-                    'tab'     => 'Forum',
-                    'span'    => 'auto',
-                    'comment' => 'rainlab.forum::lang.settings.moderator_comment'
-                ],
-                'forum_member[is_banned]' => [
-                    'label'   => 'rainlab.forum::lang.settings.banned',
-                    'type'    => 'checkbox',
-                    'tab'     => 'Forum',
-                    'span'    => 'auto',
-                    'comment' => 'rainlab.forum::lang.settings.banned_comment'
-                ]
-            ], 'primary');
+//            $widget->addFields([
+//                'forum_member[username]' => [
+//                    'label'   => 'rainlab.forum::lang.settings.username',
+//                    'tab'     => 'Forum',
+//                    'comment' => 'rainlab.forum::lang.settings.username_comment'
+//                ],
+//                'forum_member[is_moderator]' => [
+//                    'label'   => 'rainlab.forum::lang.settings.moderator',
+//                    'type'    => 'checkbox',
+//                    'tab'     => 'Forum',
+//                    'span'    => 'auto',
+//                    'comment' => 'rainlab.forum::lang.settings.moderator_comment'
+//                ],
+//                'forum_member[is_banned]' => [
+//                    'label'   => 'rainlab.forum::lang.settings.banned',
+//                    'type'    => 'checkbox',
+//                    'tab'     => 'Forum',
+//                    'span'    => 'auto',
+//                    'comment' => 'rainlab.forum::lang.settings.banned_comment'
+//                ]
+//            ], 'primary');
         });
 
-        UsersController::extendListColumns(function($widget, $model) {
-            if (!$model instanceof \Nosaraei\User\Models\User) {
-                return;
-            }
-
-            $widget->addColumns([
-                'forum_member_username' => [
-                    'label'      => 'rainlab.forum::lang.settings.forum_username',
-                    'relation'   => 'forum_member',
-                    'select'     => 'username',
-                    'searchable' => false,
-                    'invisible'  => true
-                ]
-            ]);
-        });
+//        UsersController::extendListColumns(function($widget, $model) {
+//            if (!$model instanceof \Nosaraei\User\Models\User) {
+//                return;
+//            }
+//
+//            $widget->addColumns([
+//                'forum_member_username' => [
+//                    'label'      => 'rainlab.forum::lang.settings.forum_username',
+//                    'relation'   => 'forum_member',
+//                    'select'     => 'username',
+//                    'searchable' => false,
+//                    'invisible'  => true
+//                ]
+//            ]);
+//        });
     }
 
     public function registerComponents()
@@ -148,6 +148,25 @@ class Plugin extends PluginBase
         return [
             'rainlab.forum::mail.topic_reply'   => 'Notification to followers when a post is made to a topic.',
             'rainlab.forum::mail.member_report' => 'Notification to moderators when a member is reported to be a spammer.'
+        ];
+    }
+    
+    public function registerTargetTypes()
+    {
+        return [
+            'forum' => [
+                'label' => 'انجمن',
+                'extendFields' => function(&$fields){
+                    
+                    $fields->main_value->hidden = true;
+                    $fields->main_value->type = "dropdown";
+                    
+                },
+                'description' => function($model){
+                    
+                    return "لینک به انجمن";
+                }
+            ]
         ];
     }
 }

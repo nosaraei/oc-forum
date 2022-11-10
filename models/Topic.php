@@ -42,7 +42,8 @@ class Topic extends Model
     public $rules = [
         'subject'         => 'required',
         'channel_id'      => 'required',
-        'start_member_id' => 'required'
+        'start_member_id' => 'required',
+        'slug'            => ['regex:/^[a-zالف-ی0-9\/\:_\-\*\[\]\+\?\|]*$/i', 'unique:rainlab_forum_topics'],
     ];
 
     /**
@@ -114,7 +115,7 @@ class Topic extends Model
             $post->save();
         });
 
-        TopicFollow::follow($topic, $member);
+        //TopicFollow::follow($topic, $member);
         $member->touchActivity();
 
         return $topic;
@@ -199,7 +200,7 @@ class Topic extends Model
         /*
          * Sorting
          */
-        $allowedSortingOptions = ['created_at', 'updated_at', 'subject'];
+        $allowedSortingOptions = ['created_at', 'updated_at', 'subject', 'count_posts'];
         if (!in_array($sort, $allowedSortingOptions)) {
             $sort = $allowedSortingOptions[0];
         }
@@ -208,7 +209,7 @@ class Topic extends Model
             $query->orderBy('is_sticky', 'desc');
         }
 
-        $query->orderBy($sort, in_array($sort, ['created_at', 'updated_at']) ? 'desc' : 'asc');
+        $query->orderBy($sort, in_array($sort, ['created_at', 'updated_at', 'count_posts']) ? 'desc' : 'asc');
 
         /*
          * Search

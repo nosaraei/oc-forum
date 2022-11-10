@@ -92,7 +92,10 @@ class Topics extends ComponentBase
         }
 
         $this->prepareVars();
-
+    }
+    
+    public function onRender()
+    {
         return $this->prepareTopicList();
     }
 
@@ -109,13 +112,16 @@ class Topics extends ComponentBase
 
     protected function prepareTopicList()
     {
+        $sort = $this->property('sort', 'updated_at');
+        
         $currentPage = input('page');
         $searchString = trim(input('search'));
         $topics = TopicModel::with('last_post_member')->listFrontEnd([
             'page'    => $currentPage,
             'perPage' => $this->topicsPerPage,
-            'sort'    => 'updated_at',
+            'sort'    => $sort,
             'search'  => $searchString,
+            'sticky'  => $sort == "count_posts" ? false : true,
         ]);
 
         /*
